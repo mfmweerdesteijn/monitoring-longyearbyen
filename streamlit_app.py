@@ -3,9 +3,9 @@ import folium
 
 home_page = st.Page('about.py', title='About', icon=':material/home:')
 
-ground_temperature = st.Page('borehole_ground_temperature.py', title='Ground temperature', default=True, icon=':material/thermostat:')
+ground_temperature = st.Page('main_boreholes_temperature.py', title='Ground temperature', default=True, icon=':material/thermostat:')
 ground_water_content = st.Page('borehole_ground_water_content.py', title='Ground water content', icon=':material/water_drop:')
-weather_stations = st.Page('weather_stations.py', title='Weather stations', icon=':material/cloud:')
+weather_stations = st.Page('main_weather_stations.py', title='Weather stations', icon=':material/cloud:')
 insar_deformation = st.Page('insar_deformation.py', title='InSAR deformation', icon=':material/satellite_alt:')
 all_sky_camera = st.Page('all_sky_camera.py', title='All-sky camera', icon=':material/360:')
 time_lapse_cameras = st.Page('time_lapse_cameras.py', title='Time-lapse cameras', icon=':material/photo_camera:')

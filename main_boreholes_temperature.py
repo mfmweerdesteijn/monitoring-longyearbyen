@@ -4,10 +4,10 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 
-from sources_MET import *
-from sources_Tilsig import *
-from load_data_Tilsig_and_MET import *
-from plot_borehole_data import *
+from sources_boreholes_MET import *
+from sources_boreholes_Tilsig import *
+from load_boreholes_data_Tilsig_and_MET import *
+from plot_boreholes_data import *
 
 # Functions: put in other script
 @st.cache_data

@@ -355,6 +355,7 @@ def plot_7(df):
     fig = plt.figure(figsize=(10, 6))
     plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
     plt.ylabel('Depth (m)')
+    plt.title('Contour plot of ground temperature')
     plt.gca().invert_yaxis()
     plt.tick_params(
         axis='x', which='both', bottom=False, top=False, labelbottom=True)

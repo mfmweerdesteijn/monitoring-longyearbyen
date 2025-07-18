@@ -4,7 +4,7 @@ import requests
 import datetime
 import numpy as np
 import pandas as pd
-from sources_Tilsig import depths_tilsig
+from sources_boreholes_Tilsig import depths_tilsig
 
 ##################################################
 ### Data loading from Tilsig and MET functions ###
