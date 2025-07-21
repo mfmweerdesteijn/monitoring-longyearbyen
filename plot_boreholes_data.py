@@ -60,55 +60,50 @@ def find_closest_int(array, target_value):
 def plot_2(df):
     # Temperature vs. time for 1 shallow depth: overlaying years
 
-    # Add year and day columns for plotting
-    df['year'] = df['referenceTime'].dt.year
-    df['day_of_year'] = df['referenceTime'].dt.strftime('%j').astype(int) + df['referenceTime'].dt.hour / 24.0
+    if len(df['depth'].unique()) > 1:
 
-    # Pick 2 meter depth if available, otherwise any other than the shallowest depth, otherwise none
-    depth_preferred = 200
-    if df.depth.isin([depth_preferred]).any():
-        df_plot = df[df['depth'] == depth_preferred].copy()
-        plot_title = 'Ground temperature ('+str(depth_preferred/100)+' m depth)'
-    elif len(df['depth'].unique()) > 1:
+        # Add year and day columns for plotting
+        df['year'] = df['referenceTime'].dt.year
+        df['day_of_year'] = df['referenceTime'].dt.strftime('%j').astype(int) + df['referenceTime'].dt.hour / 24.0
+
+        # Pick 2 meter depth if available, otherwise any other than the shallowest depth, otherwise none
+        depth_preferred = 200
         depth_alternative = find_closest_int(df['depth'].unique(), depth_preferred)
         df_plot = df[df['depth'] == depth_alternative].copy()
         plot_title = 'Ground temperature ('+str(depth_alternative/100)+' m depth)'
+
+        # Find number of years and create grayscale colors
+        years = sorted(df_plot['year'].dropna().unique())
+        latest_year = years[-1]
+        greys = [str(g) for g in np.linspace(0.8, 0.2, len(years) - 1)]
+
+        # Set xtick position
+        month_starts = {
+            'Jan': 1, 'Feb': 32, 'Mar': 61, 'Apr': 92, 'May': 122, 'Jun': 153,
+            'Jul': 183, 'Aug': 214, 'Sep': 245, 'Oct': 275, 'Nov': 306, 'Dec': 336
+        }
+        month_mids = {month: start + 14 for month, start in month_starts.items()}
+
+        # Create plot
+        fig = plt.figure(figsize=(10, 6))
+        for year, color in zip(years[:-1], greys):
+            group = df_plot[df_plot['year'] == year]
+            plt.plot(group['day_of_year'], group['value'], color=color, label=str(year), linewidth=1)
+        latest_group = df_plot[df_plot['year'] == latest_year]
+        plt.plot(latest_group['day_of_year'], latest_group['value'], color='dodgerblue', label=str(latest_year), linewidth=3)
+        plt.xticks(list(month_mids.values()), list(month_mids.keys()))
+        for day in month_starts.values():
+            plt.axvline(x=day, color='lightgrey', linestyle='--', linewidth=0.8)
+        plt.axvline(x=365.5, color='lightgrey', linestyle='--', linewidth=0.8)
+        plt.title(plot_title)
+        plt.xlabel('Month')
+        plt.ylabel('Temperature (°C)')
+        plt.grid(axis='y')
+        plt.legend(title='Year', loc='upper right')
+        plt.tight_layout()
+
     else:
-        df_plot = df.copy()
-        df_plot['value'] = np.nan
-        plot_title = ''
-
-    ######################################## Find way to just return fig = plt.figure(figsize=(10, 6)) when no other depth available!
-
-    # Find number of years and create grayscale colors
-    years = sorted(df_plot['year'].dropna().unique())
-    latest_year = years[-1]
-    greys = [str(g) for g in np.linspace(0.8, 0.2, len(years) - 1)]
-
-    # Set xtick position
-    month_starts = {
-        'Jan': 1, 'Feb': 32, 'Mar': 61, 'Apr': 92, 'May': 122, 'Jun': 153,
-        'Jul': 183, 'Aug': 214, 'Sep': 245, 'Oct': 275, 'Nov': 306, 'Dec': 336
-    }
-    month_mids = {month: start + 14 for month, start in month_starts.items()}
-
-    # Create plot
-    fig = plt.figure(figsize=(10, 6))
-    for year, color in zip(years[:-1], greys):
-        group = df_plot[df_plot['year'] == year]
-        plt.plot(group['day_of_year'], group['value'], color=color, label=str(year), linewidth=1)
-    latest_group = df_plot[df_plot['year'] == latest_year]
-    plt.plot(latest_group['day_of_year'], latest_group['value'], color='dodgerblue', label=str(latest_year), linewidth=3)
-    plt.xticks(list(month_mids.values()), list(month_mids.keys()))
-    for day in month_starts.values():
-        plt.axvline(x=day, color='lightgrey', linestyle='--', linewidth=0.8)
-    plt.axvline(x=365.5, color='lightgrey', linestyle='--', linewidth=0.8)
-    plt.title(plot_title)
-    plt.xlabel('Month')
-    plt.ylabel('Temperature (°C)')
-    plt.grid(axis='y')
-    plt.legend(title='Year', loc='upper right')
-    plt.tight_layout()
+        fig = plt.figure(figsize=(10, 6))
       
     return fig
 
@@ -330,38 +325,43 @@ def plot_5_6(df):
 def plot_7(df):
     # Contour plot of temperatures for all depths and times
     
-    # Create datagrids and colorbar
-    depths = np.unique(df['depth'])
-    X, Y = np.meshgrid(np.unique(df['referenceTime'].to_numpy()), depths)
-    Z = np.reshape(df['value'].to_numpy(),(np.shape(X)[0],np.shape(X)[1]), order='F')
-    custom_levels = np.array([-25,-20,-15,-10,-5,-4,-3,-2,-1,0,1,2,3,4,5,10,15,20,25])
+    if len(df['depth'].unique()) > 1:
 
-    # Set xtick positions and labels
-    first_year = int(df['referenceTime'].iloc[0].strftime('%Y'))
-    last_year = int(df['referenceTime'].iloc[-1].strftime('%Y'))
-    years = np.arange(first_year, last_year + 1)
-    years_str = [str(year) for year in years]
+        # Create datagrids and colorbar
+        depths = np.unique(df['depth'])
+        X, Y = np.meshgrid(np.unique(df['referenceTime'].to_numpy()), depths)
+        Z = np.reshape(df['value'].to_numpy(),(np.shape(X)[0],np.shape(X)[1]), order='F')
+        custom_levels = np.array([-25,-20,-15,-10,-5,-4,-3,-2,-1,0,1,2,3,4,5,10,15,20,25])
 
-    xticks_years = []
-    for i in range(len(years)):
-        xticks_years.append(datetime.datetime(years[i], 7, 1))
+        # Set xtick positions and labels
+        first_year = int(df['referenceTime'].iloc[0].strftime('%Y'))
+        last_year = int(df['referenceTime'].iloc[-1].strftime('%Y'))
+        years = np.arange(first_year, last_year + 1)
+        years_str = [str(year) for year in years]
 
-    # Import a scientific colormap
-    cm_data = np.loadtxt("vik.txt")
-    from matplotlib.colors import LinearSegmentedColormap
-    vik_map = LinearSegmentedColormap.from_list('vik', cm_data)
+        xticks_years = []
+        for i in range(len(years)):
+            xticks_years.append(datetime.datetime(years[i], 7, 1))
 
-    # Create plot
-    fig = plt.figure(figsize=(10, 6))
-    plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
-    plt.ylabel('Depth (m)')
-    plt.title('Contour plot of ground temperature')
-    plt.gca().invert_yaxis()
-    plt.tick_params(
-        axis='x', which='both', bottom=False, top=False, labelbottom=True)
-    plt.xticks(xticks_years, years_str)
-    for i in range(1,len(years)):
-        plt.axvline(x=datetime.datetime(years[i], 1, 1), color='k', linestyle='--', linewidth=0.8)
-    plt.colorbar(label='Temperature (°C)')
+        # Import a scientific colormap
+        cm_data = np.loadtxt("vik.txt")
+        from matplotlib.colors import LinearSegmentedColormap
+        vik_map = LinearSegmentedColormap.from_list('vik', cm_data)
+
+        # Create plot
+        fig = plt.figure(figsize=(10, 6))
+        plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
+        plt.ylabel('Depth (m)')
+        plt.title('Contour plot of ground temperature')
+        plt.gca().invert_yaxis()
+        plt.tick_params(
+            axis='x', which='both', bottom=False, top=False, labelbottom=True)
+        plt.xticks(xticks_years, years_str)
+        for i in range(1,len(years)):
+            plt.axvline(x=datetime.datetime(years[i], 1, 1), color='k', linestyle='--', linewidth=0.8)
+        plt.colorbar(label='Temperature (°C)')
+
+    else:
+        fig = plt.figure(figsize=(10, 6))
         
     return fig
