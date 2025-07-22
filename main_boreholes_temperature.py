@@ -124,7 +124,7 @@ if st_data['last_object_clicked_tooltip'] != None:
         fig3 = plot_3(data_df)
         fig4 = plot_4(data_df)
         fig5, fig6 = plot_5_6(data_df)
-        fig7 = plot_7(data_df)
+        fig7, fig8 = plot_7_8(data_df)
         
         with col1_1:
             st.pyplot(fig1)
@@ -141,6 +141,8 @@ if st_data['last_object_clicked_tooltip'] != None:
             st.pyplot(fig4)
 
             st.pyplot(fig6)
+
+            st.pyplot(fig8)
 
     elif button_r == True and st_data['last_object_clicked_tooltip'] in marker_met_tooltip:          
         # Create plots in columns
@@ -160,7 +162,7 @@ if st_data['last_object_clicked_tooltip'] != None:
         fig3 = plot_3(data_df)
         fig4 = plot_4(data_df)
         fig5, fig6 = plot_5_6(data_df)
-        fig7 = plot_7(data_df)
+        fig7, fig8 = plot_7_8(data_df)
 
         with col2_1:
             st.pyplot(fig1)
@@ -177,6 +179,8 @@ if st_data['last_object_clicked_tooltip'] != None:
             st.pyplot(fig4)
 
             st.pyplot(fig6)
+
+            st.pyplot(fig8)
 
     elif button_r == True and st_data['last_object_clicked_tooltip'] in marker_tilsig_tooltip:  
         # Create plots in columns
