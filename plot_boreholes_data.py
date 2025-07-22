@@ -331,7 +331,9 @@ def plot_7(df):
         depths = np.unique(df['depth'])
         X, Y = np.meshgrid(np.unique(df['referenceTime'].to_numpy()), depths)
         Z = np.reshape(df['value'].to_numpy(),(np.shape(X)[0],np.shape(X)[1]), order='F')
+
         custom_levels = np.array([-25,-20,-15,-10,-5,-4,-3,-2,-1,0,1,2,3,4,5,10,15,20,25])
+        custom_levels_ticks = np.array([-20,-15,-10,-5,0,5,10,15,20])
 
         # Set xtick positions and labels
         first_year = int(df['referenceTime'].iloc[0].strftime('%Y'))
@@ -350,7 +352,7 @@ def plot_7(df):
 
         # Create plot
         fig = plt.figure(figsize=(10, 6))
-        plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
+        contour = plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
         plt.ylabel('Depth (m)')
         plt.title('Contour plot of ground temperature')
         plt.gca().invert_yaxis()
@@ -359,7 +361,7 @@ def plot_7(df):
         plt.xticks(xticks_years, years_str)
         for i in range(1,len(years)):
             plt.axvline(x=datetime.datetime(years[i], 1, 1), color='k', linestyle='--', linewidth=0.8)
-        plt.colorbar(label='Temperature (°C)')
+        plt.colorbar(contour, label='Temperature (°C)', ticks=custom_levels_ticks, spacing='proportional')
 
     else:
         fig = plt.figure(figsize=(10, 6))
