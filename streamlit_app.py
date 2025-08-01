@@ -16,14 +16,15 @@ geomorphology = st.Page('geomorphology.py', title='Geomorphology', icon=':materi
 landslide_model = st.Page('landslide_model.py', title='Landslide model', icon=':material/landslide:')
 weather_model = st.Page('weather_model.py', title='Weather model (high resolution)', icon=':material/rainy:')
 
-
+instrument_status = st.Page('instrument_status.py', title='Boreholes status', icon=':material/battery_alert:')
 
 pg = st.navigation(
     {   
         '': [home_page],
         'Observations': [ground_temperature,ground_water_content,weather_stations,insar_deformation,all_sky_camera,time_lapse_cameras],
         'Static maps': [ground_ice_content,geomorphology],
-        'Modeling' : [landslide_model,weather_model]
+        'Modeling' : [landslide_model,weather_model],
+        'Instrument status' : [instrument_status]
     }
 )
 
