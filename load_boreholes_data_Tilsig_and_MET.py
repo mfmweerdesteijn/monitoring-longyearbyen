@@ -19,7 +19,7 @@ def load_data_Tilsig(source_string):
     ######################
 
     # Define the Tilsig API endpoint and credentials
-    endpoint = 'https://api.where2o.com/v1/authentication/authenticate'
+    endpoint = 'https://api.tilsig.com/v1/authentication/authenticate'
     username = 'maaikew@unis.no'
     password = 'ToppTur1!2@3#4$'
 
@@ -66,7 +66,7 @@ def load_data_Tilsig(source_string):
     }
 
     for i in range(len(years)-1):
-        endpoint = "https://api.where2o.com/v1/measurement/raw"
+        endpoint = "https://api.tilsig.com/v1/measurement/raw"
         parameters = {
             'stationId': '',
             'deviceId': '',
