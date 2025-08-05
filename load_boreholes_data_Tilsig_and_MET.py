@@ -20,8 +20,8 @@ def load_data_Tilsig(source_string):
 
     # Define the Tilsig API endpoint and credentials
     endpoint = 'https://api.tilsig.com/v1/authentication/authenticate'
-    username = 'maaikew@unis.no'
-    password = 'ToppTur1!2@3#4$'
+    username = st.secrets.tilsig_username
+    password = st.secrets.tilsig_password
 
     # Define the data and headers for the token request
     data = {
@@ -142,7 +142,7 @@ def load_data_MET(source_string):
         ]
 
     # Make an account on frost.met.no and paste client_id here 
-    client_id = 'd3c88b9a-0578-4021-b984-67e8f31cc1bd'
+    client_id = st.secrets.frost_client_id
 
     data_allTimes=0
     for j in range(len(reference_times)):    
