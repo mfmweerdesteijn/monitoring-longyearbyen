@@ -16,7 +16,7 @@ sources_tilsig = [
 ]
 
 marker_tilsig_html = [
-    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Vannledningsdalen<br><b>Sensor ID</b>: 7294<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2023-06-06<br><b>Owner</b>: PMC project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.5em"><b>Name</b>: Vannledningsdalen<br><b>Sensor ID</b>: 7294<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2023-06-06<br><b>Owner</b>: PMC project (UNIS)</body>''',
     '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Gruvedalen - Ski slope<br><b>Sensor ID</b>: 7295<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2023-02-02<br><b>Owner</b>: PMC project (UNIS)</body>''',
     '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Nybyen<br><b>Sensor ID</b>: 7403<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2023-02-02<br><b>Owner</b>: PMC project (UNIS)</body>''',
     '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Cemetery<br><b>Sensor ID</b>: 7316<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2023-02-02<br><b>Owner</b>: PMC project (UNIS)</body>''',
