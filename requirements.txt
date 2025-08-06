@@ -1,9 +1,8 @@
 streamlit
 pandas
 numpy
-matplotlib.pyplot
+matplotlib
 requests
 datetime
 folium
-folium.raster_layers
 streamlit_folium
