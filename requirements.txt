@@ -1,0 +1,9 @@
+streamlit
+pandas
+numpy
+matplotlib.pyplot
+requests
+datetime
+folium
+folium.raster_layers
+streamlit_folium

@@ -1,5 +1,4 @@
 import streamlit as st
-import folium
 
 home_page = st.Page('about.py', title='About', icon=':material/home:')
 
