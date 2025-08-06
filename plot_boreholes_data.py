@@ -363,20 +363,22 @@ def plot_7_8(df):
             plt.axvline(x=datetime.datetime(years[i], 1, 1), color='k', linestyle='--', linewidth=0.8)
         plt.colorbar(contour, label='Temperature (°C)', ticks=custom_levels_ticks, spacing='proportional')
 
-    if (depths > 5).any():
-        fig2 = plt.figure(figsize=(10, 6))
-        contour = plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
-        plt.ylabel('Depth (m)')
-        plt.ylim([depths.min()/100,5])
-        plt.gca().invert_yaxis()
-        plt.tick_params(
-            axis='x', which='both', bottom=False, top=False, labelbottom=True)
-        plt.xticks(xticks_years, years_str)
-        for i in range(1,len(years)):
-            plt.axvline(x=datetime.datetime(years[i], 1, 1), color='k', linestyle='--', linewidth=0.8)
-        #plt.colorbar(label='Temperature (°C)')
-        plt.colorbar(contour, label='Temperature (°C)', ticks=custom_levels_ticks, spacing='proportional')
+        if (depths > 5).any():
+            fig2 = plt.figure(figsize=(10, 6))
+            contour = plt.contourf(X, Y/100, Z, levels=custom_levels, cmap=vik_map)
+            plt.ylabel('Depth (m)')
+            plt.ylim([depths.min()/100,5])
+            plt.gca().invert_yaxis()
+            plt.tick_params(
+                axis='x', which='both', bottom=False, top=False, labelbottom=True)
+            plt.xticks(xticks_years, years_str)
+            for i in range(1,len(years)):
+                plt.axvline(x=datetime.datetime(years[i], 1, 1), color='k', linestyle='--', linewidth=0.8)
+            #plt.colorbar(label='Temperature (°C)')
+            plt.colorbar(contour, label='Temperature (°C)', ticks=custom_levels_ticks, spacing='proportional')
+        else:
+            fig2 = plt.figure(figsize=(10, 6))
     else:
-        fig2 = plt.figure(figsize=(10, 6))
+        fig1 = plt.figure(figsize=(10, 6))
 
     return fig1, fig2
