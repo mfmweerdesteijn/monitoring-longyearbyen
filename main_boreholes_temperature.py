@@ -87,34 +87,32 @@ if st_data['last_object_clicked_tooltip'] != None:
         button_r = st.button('Show recent (short-term) data', use_container_width=True)
     with col4:
         if st_data['last_object_clicked_tooltip'] in marker_met_tooltip:
+            st.text('met')
             # Load data from source
-            row_idx = [idx for idx, s in enumerate(marker_met_html) if st_data['last_object_clicked_tooltip'] in s][0]
-            source_str = sources_met[row_idx]
-            data = load_data_MET(source_str)
+            #row_idx = [idx for idx, s in enumerate(marker_met_html) if st_data['last_object_clicked_tooltip'] in s][0]
+            #source_str = sources_met[row_idx]
+            #data = load_data_MET(source_str)
 
             # Load into Dataframe and convert to CSV
-            data_df_pre = MET_data_to_dataframe(data)
-            data_df = data_processing_for_plotting(data_df_pre)
+            #data_df_pre = MET_data_to_dataframe(data)
+            #data_df = data_processing_for_plotting(data_df_pre)
 
         elif st_data['last_object_clicked_tooltip'] in marker_tilsig_tooltip:
             # Load data from source
             row_idx = [idx for idx, s in enumerate(marker_tilsig_html) if st_data['last_object_clicked_tooltip'] in s][0]
             source_str = sources_tilsig[row_idx]
-            data = load_data_Tilsig(source_str)
 
-            # Load into Dataframe and convert to CSV
-            data_df_pre = Tilsig_data_to_dataframe(data, row_idx)
-            data_df = data_processing_for_plotting(data_df_pre)
+            data_df = load_historic_borehole_data_Tilsig(source_str, row_idx)
 
-        csv = convert_df(data_df)
+        #csv = convert_df(data_df)
 
-        st.download_button(
-            'Press to download data (CSV)',
-            csv,
-            'file.csv', # Give other name
-            'text/csv',
-            key='download-csv'
-        )
+        #st.download_button(
+        #    'Press to download data (CSV)',
+        #    csv,
+        #    'file.csv', # Give other name
+        #    'text/csv',
+        #    key='download-csv'
+        #)
 
     if button_h == True and st_data['last_object_clicked_tooltip'] in marker_met_tooltip:
         # Create plots in columns
@@ -124,7 +122,7 @@ if st_data['last_object_clicked_tooltip'] != None:
         fig3 = plot_3(data_df)
         fig4 = plot_4(data_df)
         fig5, fig6 = plot_5_6(data_df)
-        fig7, fig8 = plot_7_8(data_df)
+        #fig7, fig8 = plot_7_8(data_df)
         
         with col1_1:
             st.pyplot(fig1)
@@ -133,7 +131,7 @@ if st_data['last_object_clicked_tooltip'] != None:
 
             st.pyplot(fig5)
 
-            st.pyplot(fig7)
+            #st.pyplot(fig7)
 
         with col1_2:
             st.pyplot(fig2)
@@ -142,7 +140,7 @@ if st_data['last_object_clicked_tooltip'] != None:
 
             st.pyplot(fig6)
 
-            st.pyplot(fig8)
+            #st.pyplot(fig8)
 
     elif button_r == True and st_data['last_object_clicked_tooltip'] in marker_met_tooltip:          
         # Create plots in columns
@@ -162,7 +160,7 @@ if st_data['last_object_clicked_tooltip'] != None:
         fig3 = plot_3(data_df)
         fig4 = plot_4(data_df)
         fig5, fig6 = plot_5_6(data_df)
-        fig7, fig8 = plot_7_8(data_df)
+        #fig7, fig8 = plot_7_8(data_df)
 
         with col2_1:
             st.pyplot(fig1)
@@ -171,7 +169,7 @@ if st_data['last_object_clicked_tooltip'] != None:
 
             st.pyplot(fig5)
 
-            st.pyplot(fig7)
+            #st.pyplot(fig7)
 
         with col2_2:
             st.pyplot(fig2)
@@ -180,7 +178,7 @@ if st_data['last_object_clicked_tooltip'] != None:
 
             st.pyplot(fig6)
 
-            st.pyplot(fig8)
+            #st.pyplot(fig8)
 
     elif button_r == True and st_data['last_object_clicked_tooltip'] in marker_tilsig_tooltip:  
         # Create plots in columns
