@@ -6,8 +6,8 @@ from streamlit_folium import st_folium
 from branca.element import Template, MacroElement
 
 # Set page configuration
-st.set_page_config(page_title='Ground ice content',layout='wide')
-st.title('Ground ice content')
+st.set_page_config(page_title='Depth to bedrock',layout='wide')
+st.title('Depth to bedrock')
 
 # Create map centered near Longyearbyen
 m = folium.Map(location=[78.213578, 15.699462], zoom_start=10, tiles=None, control_scale=True)#, width=300, height=100)
@@ -53,9 +53,9 @@ folium.Polygon(
     locations=polygon_coords,
     color=None,
     fill=True,
-    fill_color= "#8aaae5", # "#919191", "#d5dfe8", "#a4d1ee", "#8aaae5", "#6d78ae",
+    fill_color= "#829d4c",
     fill_opacity=0.7,
-    tooltip='>20%'
+    tooltip='0 - 5 m'
 ).add_to(m)
 
 # Add a Point (Marker)
@@ -69,11 +69,13 @@ folium.CircleMarker(
 ).add_to(m)
 
 folium.Marker(
-    [78.2206516787612, 15.63335948841357],
-    icon=folium.DivIcon(
-    #icon_size=(150,36),
-    icon_anchor=(0,0),
-    html=f'<div style="font-size: 12pt; color: black; font-weight: normal;">{"16%"}</div>')
+    location=[78.2183096579359, 15.646119038680919],
+    icon=folium.DivIcon(html=f"""<div style='font-size: 20px; font-weight: regular; color: black'>&#43;</div>""")
+).add_to(m)
+
+folium.Marker(
+    location=[78.21965605893124, 15.635458832204813],
+    icon=folium.DivIcon(html=f"""<div style='font-size: 20px; font-weight: regular; color: black'>&#215;</div>""")
 ).add_to(m)
 
 # Create the legend template as an HTML element
@@ -84,13 +86,21 @@ legend_template = """
      border-radius: 6px; padding: 10px; left: 10px; bottom: 70px;'>     
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <b>Excess Ice Content (EIC) in top 1 m permafrost</b>
-    <li>&ensp;&#9679;&ensp;&thinsp;Average EIC at boreholes (%)</li>
-    <li><span style='background: #6d78ae; opacity: 0.7;'></span>High (>20%)</li>
-    <li><span style='background: #8aaae5; opacity: 0.7;'></span>Medium (10-20%)</li>
-    <li><span style='background: #a4d1ee; opacity: 0.7;'></span>Low (5-10%)</li>
-    <li><span style='background: #d5dfe8; opacity: 0.7;'></span>Negligible (<5%)</li>
-    <li><span style='background: #919191; opacity: 0.7;'></span>No data</li>
+    <b>Observed depth to bedrock</b>
+    <li>&ensp;&#9679;&ensp;&thinsp;Depth to bedrock from boreholes</li>
+    <li>&ensp;&#43;&ensp;&thinsp;Shallow (<5 m) boreholes not reaching bedrock</li>
+    <li>&ensp;&#215;&ensp;&thinsp;Deep (>5 m) boreholes reaching bedrock</li>
+    <b>Interpolated depth to bedrock (m)</b>
+  </ul>
+  <ul class='legend-labels legend-grid'>
+    <li><span style='background: #829d4c; opacity: 0.7;'></span>0 - 5</li>
+    <li><span style='background: #a4c16d; opacity: 0.7;'></span>5 - 10</li>
+    <li><span style='background: #cde6a4; opacity: 0.7;'></span>10 - 20</li>
+    <li><span style='background: #eaf4b5; opacity: 0.7;'></span>20 - 30</li>
+    <li><span style='background: #f6ecae; opacity: 0.7;'></span>30 - 40</li>
+    <li><span style='background: #ecd097; opacity: 0.7;'></span>40 - 50</li>
+    <li><span style='background: #d3ac6b; opacity: 0.7;'></span>50 - 60</li>
+    <li><span style='background: #b98c4b; opacity: 0.7;'></span>60 - 70</li>
   </ul>
 </div>
 </div> 
@@ -98,6 +108,7 @@ legend_template = """
   .maplegend .legend-scale ul {margin: 0; padding: 0; color: #0f0f0f;}
   .maplegend .legend-scale ul li {list-style: none; line-height: 22px; margin-bottom: 1.5px;}
   .maplegend ul.legend-labels li span {float: left; height: 16px; width: 20px; margin-right: 4.5px;}
+  .legend-grid {display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, auto); grid-auto-flow: column; column-gap: 15px;}
 </style>
 {% endmacro %}
 """
