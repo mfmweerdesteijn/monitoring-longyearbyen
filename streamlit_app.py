@@ -12,6 +12,7 @@ time_lapse_cameras = st.Page('time_lapse_cameras.py', title='Time-lapse cameras'
 ground_ice_content = st.Page('ground_ice_content.py', title='Ground ice content', icon=':material/mode_cool:')
 depth_to_bedrock = st.Page('depth_to_bedrock.py', title='Depth to bedrock', icon=':material/elevation:')
 geomorphology = st.Page('geomorphology.py', title='Geomorphology', icon=':material/landscape:')
+infrastructure_risk_indicator = st.Page('infrastructure_risk_indicator.py', title='Infrastructure risk indicator', icon=':material/house_siding:')
 
 landslide_model = st.Page('landslide_model.py', title='Landslide model', icon=':material/landslide:')
 weather_model = st.Page('weather_model.py', title='Weather model (high resolution)', icon=':material/rainy:')
@@ -22,7 +23,7 @@ pg = st.navigation(
     {   
         '': [home_page],
         'Observations': [ground_temperature,ground_water_content,weather_stations,insar_deformation,all_sky_camera,time_lapse_cameras],
-        'Static maps': [ground_ice_content,depth_to_bedrock,geomorphology],
+        'Static maps': [ground_ice_content,depth_to_bedrock,geomorphology,infrastructure_risk_indicator],
         'Modeling' : [landslide_model,weather_model],
         'Instrument status' : [instrument_status]
     }
