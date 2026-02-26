@@ -53,7 +53,7 @@ folium.Polygon(
     locations=polygon_coords,
     color=None,
     fill=True,
-    fill_color= "#829d4c;",
+    fill_color= "#829d4c",
     fill_opacity=0.7,
     tooltip='landform 1'
 ).add_to(m)
