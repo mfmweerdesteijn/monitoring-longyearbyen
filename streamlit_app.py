@@ -1,8 +1,8 @@
 import streamlit as st
 
-home_page = st.Page('about.py', title='About', icon=':material/home:')
+home_page = st.Page('about.py', title='About', icon=':material/home:', default=True)
 
-ground_temperature = st.Page('main_boreholes_temperature.py', title='Ground temperature', default=True, icon=':material/thermostat:')
+ground_temperature = st.Page('main_boreholes_temperature.py', title='Ground temperature', icon=':material/thermostat:')
 ground_water_content = st.Page('borehole_ground_water_content.py', title='Ground water content', icon=':material/water_drop:')
 weather_stations = st.Page('main_weather_stations.py', title='Weather stations', icon=':material/cloud:')
 insar_deformation = st.Page('insar_deformation.py', title='InSAR deformation', icon=':material/satellite_alt:')
