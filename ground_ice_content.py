@@ -11,7 +11,9 @@ st.set_page_config(page_title='Ground ice content',layout='wide')
 st.title('Ground ice content')
 
 # Create map centered near Longyearbyen
-m = folium.Map(location=[78.213578, 15.699462], zoom_start=10, tiles=None, control_scale=True)#, width=300, height=100)
+m = folium.Map(location=[78.213578, 15.699462], zoom_start=10, tiles=None, control_scale=True)
+
+# Basemap layers for different zoom levels
 basemap = folium.FeatureGroup(name="Basemap", overlay=False)
 
 folium.raster_layers.WmsTileLayer(
@@ -44,6 +46,7 @@ folium.raster_layers.WmsTileLayer(
 
 basemap.add_to(m)
 
+# Orthographic map as overlay
 folium.raster_layers.WmsTileLayer(
     url='https://geodata.npolar.no/arcgis/rest/services/Basisdata/NP_Ortofoto_Svalbard_WMTS_3857/MapServer/tile/{z}/{y}/{x}',
     layers='NP_Ortofoto_Svalbard_WMTS_3857',
@@ -59,6 +62,7 @@ folium.raster_layers.WmsTileLayer(
     show=False,
 ).add_to(m)
 
+# Add layer control: this method ensures that there is no jumping of zoom levels when switching between basemap and ortographic map
 folium.LayerControl().add_to(m)
 
 js = """
@@ -93,9 +97,9 @@ map.on('overlayadd', function(e){
 
 m.get_root().html.add_child(Element(js))
 
-# Add markers, polylines, and polygons
+# Add data on map through polygons and markers
 
-# Add a Polygon (Filled Shape)
+# Add a polygon
 polygon_coords = [
     [78.2206516787612, 15.63335948841357],
     [78.22070424390284, 15.657220418201998],
@@ -111,7 +115,7 @@ folium.Polygon(
     tooltip='>20%'
 ).add_to(m)
 
-# Add a Point (Marker)
+# Add a marker
 folium.CircleMarker(
     location=[78.2206516787612, 15.63335948841357],
     radius=3,
@@ -124,7 +128,6 @@ folium.CircleMarker(
 folium.Marker(
     [78.2206516787612, 15.63335948841357],
     icon=folium.DivIcon(
-    #icon_size=(150,36),
     icon_anchor=(0,0),
     html=f'<div style="font-size: 12pt; color: black; font-weight: normal;">{"16%"}</div>')
 ).add_to(m)
@@ -161,4 +164,4 @@ macro._template = Template(legend_template)
 m.get_root().add_child(macro)
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, use_container_width=True, height=700, returned_objects=['last_object_clicked_tooltip']) #width=1100
+st_data = st_folium(m, use_container_width=True, height=700, returned_objects=['last_object_clicked_tooltip'])
