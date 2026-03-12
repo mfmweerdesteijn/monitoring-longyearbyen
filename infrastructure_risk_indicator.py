@@ -22,7 +22,7 @@ with col2:
     st.header("Cultural heritage")
 
 # Create map centered near Longyearbyen
-m = folium.plugins.DualMap(location=[78.213578, 15.699462], zoom_start=10, tiles=None, control_scale=True)
+m = folium.plugins.DualMap(location=[78.213578, 15.599462], zoom_start=11, tiles=None, control_scale=True)
 
 # Basemap layers for different zoom levels
 basemap = folium.FeatureGroup(name="Basemap", overlay=False)

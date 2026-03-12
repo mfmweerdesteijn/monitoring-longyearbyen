@@ -12,7 +12,7 @@ st.set_page_config(page_title='Depth to bedrock',layout='wide')
 st.title('Depth to bedrock')
 
 # Create map centered near Longyearbyen
-m = folium.Map(location=[78.213578, 15.699462], zoom_start=10, tiles=None, control_scale=True)#, width=300, height=100)
+m = folium.Map(location=[78.213578, 15.599462], zoom_start=11, tiles=None, control_scale=True)#, width=300, height=100)
 
 # Basemap layers for different zoom levels
 basemap = folium.FeatureGroup(name="Basemap", overlay=False)

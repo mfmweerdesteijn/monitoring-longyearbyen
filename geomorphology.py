@@ -5,16 +5,19 @@ import folium
 from streamlit_folium import st_folium
 from branca.element import Template, MacroElement
 from folium import Element
+import geopandas as gpd
+import random
+import json
 
 # Set page configuration
 st.set_page_config(page_title='Geomorphology',layout='wide')
 st.title('Geomorphology')
 
 # Create map centered near Longyearbyen
-m = folium.Map(location=[78.213578, 15.699462], zoom_start=10, tiles=None, control_scale=True)#, width=300, height=100)
+m = folium.Map(location=[78.213578, 15.599462], zoom_start=11, tiles=None, control_scale=True)#, width=300, height=100)
 
 # Basemap layers for different zoom levels
-basemap = folium.FeatureGroup(name="Basemap", overlay=False)
+basemap = folium.FeatureGroup(name='Basemap', overlay=False)
 
 folium.raster_layers.WmsTileLayer(
     url='https://geodata.npolar.no/arcgis/rest/services/Basisdata/NP_Basiskart_Svalbard_WMTS_3857/MapServer/tile/{z}/{y}/{x}',
@@ -72,23 +75,23 @@ var orthoLayer;
 
 // collect layers
 map.eachLayer(function(layer){
-    if(layer.options && layer.options.name === "Orthophoto"){
+    if(layer.options && layer.options.name === 'Orthophoto'){
         orthoLayer = layer;
     }
-    if(layer.options && layer.options.name === "Basemap low zoom"){
+    if(layer.options && layer.options.name === 'Basemap low zoom'){
         basemapLayers.push(layer);
     }
-    if(layer.options && layer.options.name === "Basemap high zoom"){
+    if(layer.options && layer.options.name === 'Basemap high zoom'){
         basemapLayers.push(layer);
     }
 });
 
 // custom control behavior
 map.on('overlayadd', function(e){
-    if(e.name === "Orthophoto"){
+    if(e.name === 'Orthophoto'){
         basemapLayers.forEach(l => map.removeLayer(l));
     }
-    if(e.name === "Basemap Low" || e.name === "Basemap high zoom"){
+    if(e.name === 'Basemap Low' || e.name === 'Basemap high zoom'){
         map.removeLayer(orthoLayer);
     }
 });
@@ -98,49 +101,90 @@ map.on('overlayadd', function(e){
 m.get_root().html.add_child(Element(js))
 
 # Add data on map through polygons and markers
+# Read file
+gdf = gpd.read_file('LyBQuatMap10k_Rubensdotter_2022_EPSG32633.geojson')
 
-# Add a polygon
-polygon_coords = [
-    [78.2206516787612, 15.63335948841357],
-    [78.22070424390284, 15.657220418201998],
-    [78.21704165250685, 15.655675465913536],
-    [78.2206516787612, 15.63335948841357]
-]
-folium.Polygon(
-    locations=polygon_coords,
-    color=None,
-    fill=True,
-    fill_color= "#829d4c",
-    fill_opacity=0.7,
-    tooltip='landform 1'
-).add_to(m)
+# Reproject to WGS84 (lon/lat/h)
+gdf = gdf.to_crs('EPSG:4326')
+
+# Ignore h coordinate and empty columns
+gdf['geometry'] = gdf['geometry'].force_2d()
+gdf = gdf.drop(columns=['DATO','OPPHAV','NOTAT'])
+
+# Necessary now that I don't have acces to .lyr file
+landforms_unique = gdf['JORDART'].unique()
+
+random.seed(39)
+def random_hex_color():
+    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+colors = [random_hex_color() for _ in range(len(landforms_unique))]
+landforms_colors = dict(zip(landforms_unique, colors))
+
+gdf['color'] = gdf['JORDART'].map(landforms_colors)
+
+# Add polygons to map
+for row in gdf.itertuples():
+    geom = row.geometry
+    polys = geom.geoms if geom.geom_type == "MultiPolygon" else [geom]
+
+    for poly in polys:
+        coords = [[lat, lon] for lon, lat in poly.exterior.coords]
+        folium.Polygon(
+            locations=coords,
+            color=None,
+            fill=True,
+            fill_color=row.color,
+            fill_opacity=0.7,
+            tooltip=row.JORDART
+        ).add_to(m)
+
+## Extract coordinates
+#all_polygons = []
+#
+#for geom in gdf.geometry:
+#    for poly in (geom.geoms if geom.geom_type == 'MultiPolygon' else [geom]):
+#        all_polygons.append([
+#            [lat, lon]
+#            for lon, lat in poly.exterior.coords
+#        ])
+#
+## Add polygons to map
+#for i in range(len(all_polygons)):
+#    folium.Polygon(
+#        locations=all_polygons[i],
+#        color=None,
+#        fill=True,
+#        fill_color= landforms_colors[gdf.iloc[i]['JORDART']],# "#829d4c",
+#        fill_opacity=0.7,
+#        tooltip=gdf.iloc[i]['JORDART']
+#    ).add_to(m)
 
 # Create the legend template as an HTML element
-legend_template = """
-{% macro html(this, kwargs) %}
+legend_items = ""
+
+for jordart, color in sorted(landforms_colors.items()):
+    legend_items += f"""
+    <li><span style='background:{color}; opacity:0.7;'></span>{jordart}</li>
+    """
+
+legend_template = f"""
+{{% macro html(this, kwargs) %}}
 <div id='maplegend' class='maplegend' 
     style='position: absolute; z-index: 9999; background-color: rgba(255, 255, 255, 0.8);
      border-radius: 6px; padding: 10px; left: 10px; bottom: 70px;'>     
 <div class='legend-scale'>
   <ul class='legend-labels legend-grid'>
-    <li><span style='background: #829d4c; opacity: 0.7;'></span>landform 1</li>
-    <li><span style='background: #a4c16d; opacity: 0.7;'></span>landform 2</li>
-    <li><span style='background: #cde6a4; opacity: 0.7;'></span>landform 3</li>
-    <li><span style='background: #eaf4b5; opacity: 0.7;'></span>landform 4</li>
-    <li><span style='background: #f6ecae; opacity: 0.7;'></span>landform 5</li>
-    <li><span style='background: #ecd097; opacity: 0.7;'></span>landform 6</li>
-    <li><span style='background: #d3ac6b; opacity: 0.7;'></span>landform 7</li>
-    <li><span style='background: #b98c4b; opacity: 0.7;'></span>landform 8</li>
+    {legend_items}
   </ul>
 </div>
 </div> 
 <style type='text/css'>
-  .maplegend .legend-scale ul {margin: 0; padding: 0; color: #0f0f0f;}
-  .maplegend .legend-scale ul li {list-style: none; line-height: 22px; margin-bottom: 1.5px;}
-  .maplegend ul.legend-labels li span {float: left; height: 16px; width: 20px; margin-right: 4.5px;}
-  .legend-grid {display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, auto); grid-auto-flow: column; column-gap: 15px;}
+  .maplegend .legend-scale ul {{margin: 0; padding: 0; color: #0f0f0f;}}
+  .maplegend .legend-scale ul li {{list-style: none; line-height: 22px; margin-bottom: 1.5px;}}
+  .maplegend ul.legend-labels li span {{float: left; height: 16px; width: 20px; margin-right: 4.5px;}}
+  .legend-grid {{display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(8, auto); grid-auto-flow: column; column-gap: 15px;}}
 </style>
-{% endmacro %}
+{{% endmacro %}}
 """
 
 # Add the legend to the map
