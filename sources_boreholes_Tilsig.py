@@ -61,7 +61,7 @@ marker_tilsig_tooltip = [
     'Kulturhuset: vertical',
     'Elvesletta NE',
     'Elvesletta NW',
-    'Elvesletta Mary-Ann's',
+    "Elvesletta Mary-Ann's",
     'Taubanebukk line 2b #6',
     'Taubanebukk line 2b #7',
     'Old museum',
