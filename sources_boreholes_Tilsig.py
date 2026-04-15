@@ -13,6 +13,12 @@ sources_tilsig = [
     "6927: Kulturhuset: center angled (2024-01-08)",
     "6926: Kulturhuset: rim angled (2024-01-08)",
     "6606: Kulturhuset: vertical (2023-02-02)",
+    "10919: Elvesletta NE (2025-12-07)",
+    "10952: Elvesletta NW (2025-12-07)",
+    "10886: Elvesletta Mary-Ann's (2025-12-07)",
+    "13097: Taubanebukk line 2b #6 (2026-04-09)",
+    "10165: Taubanebukk line 2b #7 (2026-04-09)",
+    "10162: Old museum (2026-04-09)",
 ]
 
 marker_tilsig_html = [
@@ -30,6 +36,12 @@ marker_tilsig_html = [
     '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Kulturhuset: center angled<br><b>Sensor ID</b>: 7313<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2024-01-08<br><b>Owner</b>: PMC project (UNIS)</body>''',
     '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Kulturhuset: rim angled<br><b>Sensor ID</b>: 7309<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2024-01-08<br><b>Owner</b>: PMC project (UNIS)</body>''',
     '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Kulturhuset: vertical<br><b>Sensor ID</b>: 7310<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2023-02-02<br><b>Owner</b>: PMC project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Elvesletta NE<br><b>Sensor ID</b>: 10919<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2025-12-07<br><b>Owner</b>: ThawingLYR project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Elvesletta NW<br><b>Sensor ID</b>: 10952<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2025-12-07<br><b>Owner</b>: ThawingLYR project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Elvesletta Mary-Ann's<br><b>Sensor ID</b>: 10886<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2025-12-07<br><b>Owner</b>: ThawingLYR project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Taubanebukk line 2b #6<br><b>Sensor ID</b>: 13097<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2026-04-09<br><b>Owner</b>: ThawingLYR project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Taubanebukk line 2b #7<br><b>Sensor ID</b>: 10165<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2026-04-09<br><b>Owner</b>: ThawingLYR project (UNIS)</body>''',
+    '''<body style="font-family:sans-serif; font-size:0.9em"><b>Name</b>: Old museum<br><b>Sensor ID</b>: 10162<br><b>Data</b>: Ground temperature<br><b>Since</b>: 2026-04-09<br><b>Owner</b>: ThawingLYR project (UNIS)</body>''',
 ]
 
 marker_tilsig_tooltip = [
@@ -47,6 +59,12 @@ marker_tilsig_tooltip = [
     'Kulturhuset: center angled',
     'Kulturhuset: rim angled',
     'Kulturhuset: vertical',
+    'Elvesletta NE',
+    'Elvesletta NW',
+    'Elvesletta Mary-Ann's',
+    'Taubanebukk line 2b #6',
+    'Taubanebukk line 2b #7',
+    'Old museum',
 ]
 
 marker_tilsig_coordinates = [
@@ -64,6 +82,12 @@ marker_tilsig_coordinates = [
     [78.2196, 15.6427],
     [78.2197, 15.6422],
     [78.2196, 15.6413],
+    [78.2221, 15.6432],
+    [78.2219, 15.6401],
+    [78.2220, 15.6364],
+    [78.2097, 15.6161],
+    [78.2088, 15.6148],
+    [78.2173, 15.6155],
 ]
 
 depths_tilsig = [
@@ -81,4 +105,10 @@ depths_tilsig = [
     [40, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750],
     [40, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750],
     [40, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050],
+    [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2300, 2100, 1900, 1700, 1500, 1300, 1100, 900],
+    [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2300, 2100, 1900, 1700, 1500, 1300, 1100, 900],
+    [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3600, 3800, 4000],
+    [0, 10, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 250, 300, 350, 400, 450, 500],
+    [0, 10, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 250, 300, 350, 400, 450, 500],
+    [0, 10, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 250, 300, 350, 400, 450, 500],
 ]
