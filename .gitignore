@@ -1,3 +1,7 @@
 .streamlit/secrets.toml
 tests/
 LyBQuatMap10k_Rubensdotter_2022_EPSG32633.geojson
+__pycache__/
+*.pyc
+.vscode/
+.vscode/settings.json
