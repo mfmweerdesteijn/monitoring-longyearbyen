@@ -109,58 +109,73 @@ m.get_root().html.add_child(Element(js))
 # Create markers with popup texts and icons
 #icon_ws = folium.Icon(color='blue',icon='cloud')
 
-for i in range(len(marker_met_html)):
+for i in range(len(sources_met_boreholes)):
     icon_bh = folium.Icon(color='orange',icon='temperature-half', prefix='fa')
     #iframe = folium.IFrame(marker_html[i], width=200, height=110)
     #popup = folium.Popup(iframe)
-    html = folium.Html(marker_met_html[i], script=True)
+    marker = f'''<body style="font-family:sans-serif; font-size:0.5em">
+    <b>Name</b>: {sources_met_boreholes[i]['name']}<br>
+    <b>Source ID</b>: {sources_met_boreholes[i]['sourceID']}<br>
+    <b>Data</b>: {sources_met_boreholes[i]['type']}<br>
+    <b>Since</b>: {sources_met_boreholes[i]['startDate']}<br>
+    <b>Owner</b>: {sources_met_boreholes[i]['owner']}
+    </body>'''
+    html = folium.Html(marker, script=True)
     popup = folium.Popup(html, max_width=500)
     folium.Marker(
-        location=marker_met_coordinates[i], popup=popup, tooltip=marker_met_tooltip[i], icon=icon_bh
+        location=sources_met_boreholes[i]['coordinates'], popup=popup, tooltip=sources_met_boreholes[i]['name'], icon=icon_bh
     ).add_to(m)
 
-for i in range(len(marker_tilsig_html)):
+for i in range(len(sources_tilsig_boreholes)):
     icon_bh2 = folium.Icon(color='red',icon='temperature-half', prefix='fa')
     #iframe = folium.IFrame(marker_html[i], width=200, height=110)
     #popup = folium.Popup(iframe)
-    html = folium.Html(marker_tilsig_html[i], script=True)
+    marker = f'''<body style="font-family:sans-serif; font-size:0.5em">
+    <b>Name</b>: {sources_tilsig_boreholes[i]['name']}<br>
+    <b>Sensor ID</b>: {sources_tilsig_boreholes[i]['sensorID']}<br>
+    <b>Data</b>: {sources_tilsig_boreholes[i]['type']}<br>
+    <b>Since</b>: {sources_tilsig_boreholes[i]['startDate']}<br>
+    <b>Owner</b>: {sources_tilsig_boreholes[i]['owner']}
+    </body>'''
+    html = folium.Html(marker, script=True)
     popup = folium.Popup(html, max_width=500)
     folium.Marker(
-        location=marker_tilsig_coordinates[i], popup=popup, tooltip=marker_tilsig_tooltip[i], icon=icon_bh2
+        location=sources_tilsig_boreholes[i]['coordinates'], popup=popup, tooltip=sources_tilsig_boreholes[i]['name'], icon=icon_bh2
     ).add_to(m)
 
 # call to render Folium map in Streamlit
 st_data = st_folium(m, use_container_width=True, height=450, returned_objects=['last_object_clicked_tooltip']) #width=1100
 
 # Visualize data?
+#if st_data['last_object_clicked_tooltip'] != None:
+
+st.markdown(f"You selected **{st_data['last_object_clicked_tooltip']}**")
 if st_data['last_object_clicked_tooltip'] != None:
-    st.markdown(f"You selected **{st_data['last_object_clicked_tooltip']}**")
+
     #if st.button(f"Visualizate data of **{st_data['last_object_clicked_tooltip']}**?",type='primary'):
-        
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         button_h = st.button('Show historic (long-term) data', use_container_width=True)
     with col2:
         button_r = st.button('Show recent (short-term) data', use_container_width=True)
     with col4:
-        if st_data['last_object_clicked_tooltip'] in marker_met_tooltip:
+        if any(station['name'] == st_data['last_object_clicked_tooltip'] for station in sources_met_boreholes):
             # Load data from source
-            row_idx = [idx for idx, s in enumerate(marker_met_html) if st_data['last_object_clicked_tooltip'] in s][0]
-            source_str = sources_met[row_idx]
-            data = load_data_MET(source_str)
+            source = lookup_by_station_name_met.get(st_data['last_object_clicked_tooltip'])
+            data = load_data_MET(source)
 
             # Load into Dataframe and convert to CSV
             data_df_pre = MET_data_to_dataframe(data)
             data_df = data_processing_for_plotting(data_df_pre)
 
-        elif st_data['last_object_clicked_tooltip'] in marker_tilsig_tooltip:
+        elif any(station['name'] == st_data['last_object_clicked_tooltip'] for station in sources_tilsig_boreholes):
             # Load data from source
-            row_idx = [idx for idx, s in enumerate(marker_tilsig_html) if st_data['last_object_clicked_tooltip'] in s][0]
-            source_str = sources_tilsig[row_idx]
-            data = load_data_Tilsig(source_str)
+            source = lookup_by_station_name_tilsig.get(st_data['last_object_clicked_tooltip'])
+            data = load_data_Tilsig(source)
 
             # Load into Dataframe and convert to CSV
-            data_df_pre = Tilsig_data_to_dataframe(data, row_idx)
+            data_df_pre = Tilsig_data_to_dataframe(data, source)
             data_df = data_processing_for_plotting(data_df_pre)
 
         csv = convert_df(data_df)
@@ -173,7 +188,7 @@ if st_data['last_object_clicked_tooltip'] != None:
             key='download-csv'
         )
 
-    if button_h == True and st_data['last_object_clicked_tooltip'] in marker_met_tooltip:
+    if button_h == True and any(station['name'] == st_data['last_object_clicked_tooltip'] for station in sources_met_boreholes):
         # Create plots in columns
         col1_1, col1_2 = st.columns(2)
         fig1 = plot_1(data_df)
@@ -201,7 +216,7 @@ if st_data['last_object_clicked_tooltip'] != None:
 
             st.pyplot(fig8)
 
-    elif button_r == True and st_data['last_object_clicked_tooltip'] in marker_met_tooltip:          
+    elif button_r == True and any(station['name'] == st_data['last_object_clicked_tooltip'] for station in sources_met_boreholes):          
         # Create plots in columns
         col2_1, col2_2 = st.columns(2)
 
@@ -211,7 +226,7 @@ if st_data['last_object_clicked_tooltip'] != None:
         with col2_2:
             'More plots'
 
-    elif button_h == True and st_data['last_object_clicked_tooltip'] in marker_tilsig_tooltip:       
+    elif button_h == True and any(station['name'] == st_data['last_object_clicked_tooltip'] for station in sources_tilsig_boreholes):
         # Create plots in columns
         col2_1, col2_2 = st.columns(2)
         fig1 = plot_1(data_df)
@@ -239,7 +254,7 @@ if st_data['last_object_clicked_tooltip'] != None:
 
             st.pyplot(fig8)
 
-    elif button_r == True and st_data['last_object_clicked_tooltip'] in marker_tilsig_tooltip:  
+    elif button_r == True and any(station['name'] == st_data['last_object_clicked_tooltip'] for station in sources_tilsig_boreholes):  
         # Create plots in columns
         col2_1, col2_2 = st.columns(2)
 

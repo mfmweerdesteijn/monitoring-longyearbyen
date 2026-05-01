@@ -4,7 +4,6 @@ import requests
 import datetime
 import numpy as np
 import pandas as pd
-from sources_boreholes_Tilsig import depths_tilsig
 
 ##################################################
 ### Data loading from Tilsig and MET functions ###
@@ -12,7 +11,7 @@ from sources_boreholes_Tilsig import depths_tilsig
 
 # Load data once per day
 @st.cache_data(ttl=86400, show_spinner='Fetching data')
-def load_data_Tilsig(source_string):
+def load_data_Tilsig(source):
 
     ######################
     ### Authentication ###
@@ -49,9 +48,9 @@ def load_data_Tilsig(source_string):
     ######################
 
     # Loop over years because data request is limited to 1 year
-    source_sn = source_string[:4]
+    source_sn = str(source['sensorID'])
 
-    start_date = source_string[len(source_string)-11:-1]
+    start_date = source['startDate']
     start_year = int(start_date[:4])
     end_year = datetime.datetime.now().year + 1
 
@@ -87,7 +86,7 @@ def load_data_Tilsig(source_string):
     return data
 
 
-def Tilsig_data_to_dataframe(data, row_idx):
+def Tilsig_data_to_dataframe(data, source):
     # Load into to DataFrame
     df = pd.DataFrame(data)
 
@@ -98,11 +97,11 @@ def Tilsig_data_to_dataframe(data, row_idx):
     df = df.sort_values(['timestamp', 'sequence'])
 
     # Add depth column corresponding to sequence
-    depths = depths_tilsig[row_idx]
-    sequences = np.sort(df['sequence'].unique()).tolist()
-    depth_map = dict(zip(sequences, depths))
+    depth_map = source['depths']
+    #sequences = np.sort(df['sequence'].unique()).tolist()
+    #depth_map = dict(zip(sequences, depths))
     df['depth'] = df['sequence'].map(depth_map)
-    df['depthUnit'] = 'cm'
+    df['depthUnit'] = source['depthsUnit']
 
     # Drop unwanted columns
     df = df.drop(columns=['unitId', 'typeId', 'category', 'sequence'], errors='ignore').reset_index()
@@ -124,19 +123,19 @@ def Tilsig_data_to_dataframe(data, row_idx):
 
 # Load data once per day
 @st.cache_data(ttl=86400, show_spinner="Fetching data")
-def load_data_MET(source_string):
+def load_data_MET(source):
     # Load data from MET source
-    source_sn = source_string[:7]
+    source_sn = source['sourceID']
     
     # Date tomorrow
     date_tomorrow = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 
     # Define reference time for each source
-    if source_string != "SN99875: JANSSONHAUGEN (1998-05-09)":
-        reference_times = [source_string[len(source_string)-11:-1] + "/" + date_tomorrow]
+    if source_sn != 'SN99875':
+        reference_times = [source['startDate'] + "/" + date_tomorrow]
     else:
         reference_times = [
-        source_string[len(source_string)-11:-1] + "/" + '2008-01-01',
+        source['startDate'] + "/" + '2008-01-01',
         '2008-01-01' + "/" + '2018-01-01',
         '2018-01-01' + "/" + date_tomorrow
         ]
